@@ -95,6 +95,8 @@ export default function Cart() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
+  const [mobilError, setMobilError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
   function countclick(index) {
     const selectedItem = filterdUser[index];
@@ -127,8 +129,17 @@ export default function Cart() {
       setTimeout(() => {
         setOrderSuccess(false);
       }, 3000);
-    } else if (address.trim() === "" && mobile.trim === "") {
-      
+    }
+    if (mobile.trim() === "") {
+      setMobilError("red-500");
+    } else {
+      setMobilError("");
+    }
+
+    if (address.trim() === "") {
+      setAddressError("red-500");
+    } else {
+      setAddressError("");
     }
   }
 
@@ -354,7 +365,8 @@ export default function Cart() {
                     className="border-2 border-gray-300 rounded-xl p-3 h-24 focus:border-green-500 focus:outline-none transition-colors resize-none bg-gray-50 hover:bg-white"
                     placeholder="Enter your complete address..."
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => { setAddress(e.target.value); setAddressError(""); }}
+                    style={{ borderColor: addressError ? "red" : "" }}
                   ></textarea>
                 </div>
 
@@ -367,7 +379,8 @@ export default function Cart() {
                     className="border-2 border-gray-300 rounded-xl p-3 focus:border-green-500 focus:outline-none transition-colors bg-gray-50 hover:bg-white"
                     placeholder="Enter your mobile number..."
                     value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
+                    onChange={(e) => { setMobile(e.target.value); setMobilError(""); }}
+                    style={{ borderColor: mobilError ? "red" : "" }}
                   />
                 </div>
 
