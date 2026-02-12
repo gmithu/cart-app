@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import CloseButton from "./CloseButton";
+import Button from "./Button";
+import Input from "./Input";
 
 export default function Cart() {
-  const [items, setItems] = useState([
+  const [items] = useState([
     {
       src: process.env.PUBLIC_URL + "/shw.jpg",
       rate: "29",
@@ -78,7 +81,6 @@ export default function Cart() {
       name: "reebook",
     },
   ]);
-  const [searchinput, setSearchinput] = useState("");
   const [filterdUser, setFilterdUser] = useState(items);
 
   const [Cart, setCart] = useState(() => {
@@ -106,7 +108,7 @@ export default function Cart() {
   function handlestart(search) {
     if (search.trim() !== "") {
       const filterd = items.filter((e) =>
-        e.name.toLowerCase().startsWith(search.toLowerCase())
+        e.name.toLowerCase().startsWith(search.toLowerCase()),
       );
 
       setFilterdUser(filterd);
@@ -151,57 +153,59 @@ export default function Cart() {
             <span className="text-3xl">🛍️</span>
           </div>
           <h1 className="flex justify-center items-center font-bold text-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Shoow Cart
+            Shoo Cart
           </h1>
         </div>
-        <input
-          type="text"
-          className="bg-gray-100 w-3/4 h-11 rounded-xl px-5 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition-all placeholder-gray-400"
-          placeholder="🔍 Search Items..."
-          onChange={(e) => {
-            setSearchinput(e.target.value);
-            handlestart(e.target.value);
-          }}
-        />
+
+        {/* input */}
+
+        <Input onChange={(e) => handlestart(e.target.value)} />
+        
       </div>
 
       <div className="flex flex-1 w-full gap-6 px-6 ">
         <div className="flex-1 max-h-[760px] rounded-2xl gap-20 flex flex-wrap bg-gradient-to-br from-sky-50 to-blue-50 justify-center p-6 items-start overflow-y-auto shadow-inner">
-          {filterdUser.map((value, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200"
-              style={{ width: "256px" }}
-            >
-              <div
-                className="w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 shadow-inner"
-                style={{ height: "176px" }}
-              >
-                <img
-                  src={value.src}
-                  className="w-full h-full object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
-                  onClick={() => setSelect(value)}
-                  alt={value.name}
-                />
-              </div>
-              <div className="w-16 bg-gradient-to-r from-amber-400 to-orange-500 text-white h-7 rounded-full flex justify-center items-center font-bold shadow-md mt-2 text-sm">
-                ${value.rate}
-              </div>
-              <div className="flex flex-col gap-3 p-2 items-center w-full">
-                <h1 className="text-gray-700 font-semibold text-center text-sm truncate w-full">
-                  {value.name}
-                </h1>
-                <button
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold px-4 py-2 rounded-full w-full hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105 text-sm"
-                  onClick={() => {
-                    countclick(index);
-                  }}
-                >
-                  🛒 Add Cart
-                </button>
-              </div>
+          {filterdUser.length === 0 ? (
+            <div className="w-full flex flex-col items-center justify-center text-gray-400 text-xl font-semibold py-24">
+              <span>🕵️‍♂️</span>
+              <span>No items found.</span>
             </div>
-          ))}
+          ) : (
+            filterdUser.map((value, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200"
+                style={{ width: "256px" }}
+              >
+                <div
+                  className="w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 shadow-inner"
+                  style={{ height: "176px" }}
+                >
+                  <img
+                    src={value.src}
+                    className="w-full h-full object-contain cursor-pointer hover:scale-110 transition-transform duration-300"
+                    onClick={() => setSelect(value)}
+                    alt={value.name}
+                  />
+                </div>
+                <div className="w-16 bg-gradient-to-r from-amber-400 to-orange-500 text-white h-7 rounded-full flex justify-center items-center font-bold shadow-md mt-2 text-sm">
+                  ${value.rate}
+                </div>
+                <div className="flex flex-col gap-3 p-2 items-center w-full">
+                  <h1 className="text-gray-700 font-semibold text-center text-sm truncate w-full">
+                    {value.name}
+                  </h1>
+
+                  {/* add cart button */}
+
+                  <Button variant="filled" onClick={() => countclick(index)}>
+                    🛒 Add Cart
+                  </Button>
+
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         <div className="flex h-3/4 ">
@@ -215,47 +219,50 @@ export default function Cart() {
             </div>
 
             <ul className="flex flex-col gap-3">
-              {Cart.map((value, index) => (
-                <li
-                  key={index}
-                  className="flex flex-col rounded-2xl p-4 bg-white shadow-md hover:shadow-lg transition-all border border-gray-200 gap-3"
-                >
-                  <div className="flex gap-3">
-                    <img
-                      src={value.src}
-                      alt={value.name}
-                      className="w-24 h-20 rounded-xl object-cover shadow-sm border-2 border-gray-100"
-                    />
-                    <div className="flex-1 flex flex-col justify-center gap-1">
-                      <h3 className="font-bold text-gray-800 text-lg">
-                        {value.name}
-                      </h3>
-                      <p className="text-2xl font-bold text-green-600">
-                        ${value.rate}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <button
-                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold py-2.5 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105"
-                      onClick={() => {
-                        setSelectOrder(value);
-                      }}
-                    >
-                      📦 Place Order
-                    </button>
-                    <button
-                      className="px-4 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg"
-                      onClick={() => {
-                        filterd(index);
-                      }}
-                    >
-                      🗑️
-                    </button>
-                  </div>
+              {Cart.length === 0 ? (
+                <li className="flex flex-col items-center justify-center text-gray-400 text-xl font-semibold py-12">
+                  <span className="text-4xl">🛒</span>
+                  <span>No items in cart.</span>
                 </li>
-              ))}
+              ) : (
+                Cart.map((value, index) => (
+                  <li
+                    key={index}
+                    className="flex flex-col rounded-2xl p-4 bg-white shadow-md hover:shadow-lg transition-all border border-gray-200 gap-3"
+                  >
+                    <div className="flex gap-3">
+                      <img
+                        src={value.src}
+                        alt={value.name}
+                        className="w-24 h-20 rounded-xl object-cover shadow-sm border-2 border-gray-100"
+                      />
+                      <div className="flex-1 flex flex-col justify-center gap-1">
+                        <h3 className="font-bold text-gray-800 text-lg">
+                          {value.name}
+                        </h3>
+                        <p className="text-2xl font-bold text-green-600">
+                          ${value.rate}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        variant="filled"
+                        onClick={() => {
+                          setSelectOrder(value);
+                        }}
+                      >
+                        📦 Place Order
+                      </Button>
+                      {/* delete item button */}
+                      <Button variant="danger" onClick={() => filterd(index)}>
+                        <span className="text-2xl">🗑️</span>
+                      </Button>
+                    </div>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
         </div>
@@ -263,12 +270,7 @@ export default function Cart() {
           <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 backdrop-blur-sm">
             <div className="bg-white rounded-3xl w-[520px] shadow-2xl flex flex-col overflow-hidden transform transition-all relative">
               {/* Close Button */}
-              <button
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-gray-800 bg-opacity-50 hover:bg-opacity-70 flex items-center justify-center text-white text-2xl font-bold transition-all hover:scale-110"
-                onClick={() => setSelect(null)}
-              >
-                ×
-              </button>
+              <CloseButton onClick={() => setSelect(null)}>×</CloseButton>
 
               {/* Product Image */}
               <div className="relative bg-gradient-to-br from-amber-50 to-orange-50 p-6">
@@ -299,21 +301,15 @@ export default function Cart() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                  <button
-                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-4 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  <Button
+                    variant="filled"
                     onClick={() => {
                       setCart((prevCart) => [...prevCart, select]);
                       setSelect(null);
                     }}
                   >
                     🛒 Add to Cart
-                  </button>
-                  <button
-                    className="px-6 border-2 border-gray-300 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 transition-all"
-                    onClick={() => setSelect(null)}
-                  >
-                    Close
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -324,12 +320,9 @@ export default function Cart() {
             <div className="w-[480px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-fade-in">
               {/* Header */}
               <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white relative">
-                <button
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center text-xl font-bold transition-all"
-                  onClick={() => setSelectOrder(null)}
-                >
+                <CloseButton onClick={() => setSelectOrder(null)}>
                   ×
-                </button>
+                </CloseButton>
                 <h2 className="text-2xl font-bold">Complete Your Order</h2>
                 <p className="text-green-100 text-sm mt-1">
                   Fill in your delivery details
@@ -365,7 +358,10 @@ export default function Cart() {
                     className="border-2 border-gray-300 rounded-xl p-3 h-24 focus:border-green-500 focus:outline-none transition-colors resize-none bg-gray-50 hover:bg-white"
                     placeholder="Enter your complete address..."
                     value={address}
-                    onChange={(e) => { setAddress(e.target.value); setAddressError(""); }}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                      setAddressError("");
+                    }}
                     style={{ borderColor: addressError ? "red" : "" }}
                   ></textarea>
                 </div>
@@ -379,24 +375,24 @@ export default function Cart() {
                     className="border-2 border-gray-300 rounded-xl p-3 focus:border-green-500 focus:outline-none transition-colors bg-gray-50 hover:bg-white"
                     placeholder="Enter your mobile number..."
                     value={mobile}
-                    onChange={(e) => { setMobile(e.target.value); setMobilError(""); }}
+                    onChange={(e) => {
+                      setMobile(e.target.value);
+                      setMobilError("");
+                    }}
                     style={{ borderColor: mobilError ? "red" : "" }}
                   />
                 </div>
 
                 <div className="flex gap-3 mt-2">
-                  <button
-                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-                    onClick={handlePlaceOrder}
-                  >
+                  <Button variant="filled" onClick={handlePlaceOrder}>
                     🎉 Place Order
-                  </button>
-                  <button
-                    className="px-6 border-2 border-gray-300 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 transition-all"
+                  </Button>
+                  <Button
+                    variant="outlined"
                     onClick={() => setSelectOrder(null)}
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -416,12 +412,9 @@ export default function Cart() {
                   Thank you for your order. We'll deliver it soon!
                 </p>
               </div>
-              <button
-                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
-                onClick={() => setOrderSuccess(false)}
-              >
+              <CloseButton onClick={() => setOrderSuccess(false)}>
                 ×
-              </button>
+              </CloseButton>
             </div>
           </div>
         )}
