@@ -160,7 +160,7 @@ export default function Cart() {
         {/* input */}
 
         <Input onChange={(e) => handlestart(e.target.value)} />
-        
+
       </div>
 
       <div className="flex flex-1 w-full gap-6 px-6 ">
@@ -315,6 +315,7 @@ export default function Cart() {
             </div>
           </div>
         )}
+
         {selectOrder && (
           <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 backdrop-blur-sm">
             <div className="w-[480px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-fade-in">
@@ -398,6 +399,7 @@ export default function Cart() {
             </div>
           </div>
         )}
+        
         {orderSuccess && (
           <div className="fixed top-6 right-6 z-[60] animate-slide-in">
             <div className="bg-white rounded-2xl shadow-2xl border-2 border-green-500 p-6 min-w-[320px] flex items-start gap-4">
